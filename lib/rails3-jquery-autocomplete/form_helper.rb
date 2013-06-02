@@ -12,6 +12,12 @@ module ActionView
         options["data-autocomplete"] = source
         text_field(object_name, method, rewrite_autocomplete_option(options))
       end
+
+      def autocomplete_textarea_field(object_name, method, source, options={})
+        options["data-autocomplete"] = source
+        text_area(object_name, method, rewrite_autocomplete_option(options))
+      end
+
     end
 
     module FormTagHelper
@@ -43,5 +49,9 @@ end
 class ActionView::Helpers::FormBuilder #:nodoc:
   def autocomplete_field(method, source, options = {})
     @template.autocomplete_field(@object_name, method, source, objectify_options(options))
+  end
+
+  def autocomplete_textarea_field(method, source, options = {})
+    @template.autocomplete_textarea_field(@object_name, method, source, objectify_options(options))
   end
 end

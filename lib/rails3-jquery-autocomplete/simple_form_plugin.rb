@@ -34,6 +34,30 @@ module SimpleForm
       end
     end
 
+    class AutocompleteInputText < Base
+      include Autocomplete
+
+      def input
+        options[:as] = :autocomplete
+        input_html_options[:class] =
+          input_html_options[:class].map { |e| e == :autocomplete_textarea ? :autocomplete : e }
+        @builder.autocomplete_textarea_field(
+          attribute_name,
+          options[:url],
+          rewrite_autocomplete_option
+        )
+      end
+
+      protected
+      def limit
+        column && column.limit
+      end
+  
+      def has_placeholder?
+        placeholder_present?
+      end
+    end
+
     class AutocompleteCollectionInput < CollectionInput
       include Autocomplete
 
@@ -78,6 +102,7 @@ module SimpleForm
 
   class FormBuilder
     map_type :autocomplete, :to => SimpleForm::Inputs::AutocompleteInput
+    map_type :autocomplete_textarea, :to => SimpleForm::Inputs::AutocompleteInputText
     map_type :autocomplete_collection, :to => SimpleForm::Inputs::AutocompleteCollectionInput
   end
 
